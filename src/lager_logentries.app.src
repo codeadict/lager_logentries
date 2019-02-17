@@ -1,0 +1,18 @@
+%-*-Erlang-*-
+{application, lager_logentries,
+ [
+  {description, "Lager backend sending log messages to Logentries"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  backoff,
+                  jiffy
+                 ]},
+  {env, []},
+  {maintainers, ["Dairon Medina Caro"]},
+  {licenses, ["Apache 2.0"]},
+  {links, [{"Github", "https://github.com/codeadict/lager_logentries"}]}
+ ]
+}.
