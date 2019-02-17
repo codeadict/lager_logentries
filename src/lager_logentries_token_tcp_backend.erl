@@ -12,6 +12,9 @@
 -define(BACKOFF_START, 1).
 -define(BACKOFF_MAX, 30).
 
+-type socket() :: disconnected | {connected, gen_tcp:socket()}.
+-type extra_connect_opts() :: [inet:address_family()].
+
 %% gen_event callbacks
 
 init(Options) ->
@@ -44,7 +47,7 @@ handle_event({log, Message}, #{name := Name,
                     {ok, State};
                 {error, Reason} ->
                     lager:error("Couldn't send log payload: ~p", [Reason]),
-                    {ok, try_connect(State#{socket := disconnected})}
+                    {ok, open_connection(State#{socket := disconnected})}
             end;
         false ->
             {ok, State}
@@ -56,9 +59,9 @@ handle_event(_, State) ->
 
 handle_info({tcp_closed, _Socket}, #{socket := {connected, _Socket}} = State) ->
     lager:error("Connection closed", []),
-    {ok, maybe_connect(State#{socket := disconnected})};
+    {ok, open_connection(State#{socket := disconnected})};
 handle_info({timeout, _, reconnect}, #{socket := disconnected} = State) ->
-    {ok, maybe_connect(State)};
+    {ok, open_connection(State)};
 handle_info(_, State) ->
     {ok, State}.
 
@@ -70,8 +73,8 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% Internal functions
 
--spec maybe_connect(state()) -> state().
-maybe_connect(#{socket := disconnected,
+-spec open_connection(state()) -> state().
+open_connection(#{socket := disconnected,
               host := Host,
               port := Port,
               extra_connect_opts := ExtraConnectOpts,
