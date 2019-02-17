@@ -13,6 +13,51 @@ Rebar3 dependencies:
 ]}.
 ```
 
+## Configuration
+
+Add configuration to `sys.config`:
+
+```erlang
+{lager, [{ handlers
+         , [{ lager_logentries_token_tcp_backend
+            , [ {host, "data.logentries.com"}
+              , {port, 80}
+              ]
+            }]
+         }]
+}
+```
+
+## Usage
+
+```erlang
+-module(example).
+
+-export([main/0]).
+
+main() ->
+  lager:info([{service, "mycoolapp"}], "Hello ~s", ["world"]).
+```
+
+Would result in JSON like this:
+
+```javascript
+{
+  "message": "Hello world",
+  "timestamp": "2019-02-17T02:40:33.916880",
+  "fields": {
+    "severity": "info",
+    "service": "mycoolapp",
+    "application": "example",
+    "node": "node@localhost",
+    "pid": "<0.13919.0>",
+    "module": "example",
+    "function": "main",
+    "line": "6"
+  }
+}
+```
+
 ## Contributing
 
 Pull requests are most welcome. If you have any questions, bug reports or feature proposals just
