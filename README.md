@@ -1,6 +1,6 @@
 # lager_logentries
 
-Backend for Lager which sends logs to Logentries ( https://logentries.com )
+Backend for Lager which sends logs to Logentries (https://logentries.com  via [Token TCP](https://docs.logentries.com/docs/input-token)
 
 ## Installation
 
