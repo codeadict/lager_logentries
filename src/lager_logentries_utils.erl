@@ -1,6 +1,9 @@
 -module(lager_logentries_utils).
 
--export([parse_config/1]).
+-export([parse_config/1,
+         validate_loglevel/1,
+         safe_json/1
+        ]).
 
 -type config() :: #{host := lager_logentries:host(),
                     port := lager_logentries:port_number(),
