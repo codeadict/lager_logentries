@@ -100,11 +100,11 @@ validate_setting(context, Context) ->
 validate_setting(_, _) ->
     ok.
 
--spec safe_json([{term(), term()}]) -> [{atom() | binary(), jsx:json_term()}].
+-spec safe_json([{term(), term()}]) -> [lager_logentries:json_object()].
 safe_json(Fields) ->
     lists:map(fun to_json/1, Fields).
 
--spec to_json({term(), term()}) -> {atom() | binary(), jsx:json_term()}.
+-spec to_json({term(), term()}) -> lager_logentries:json_object().
 to_json({Key, Value}) when is_atom(Key);
                            is_binary(Key)->
     {Key, json_value(Value)};
