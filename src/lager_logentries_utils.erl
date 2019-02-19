@@ -1,4 +1,4 @@
--module(lager_logentries_utils).
+ -module(lager_logentries_utils).
 
 -export([parse_config/1,
          validate_loglevel/1,
@@ -9,6 +9,7 @@
                     port := lager_logentries:port_number(),
                     address_family := lager_logentries:address_family(),
                     level := lager_logentries:mask(),
+                    token := iolist() | binary(),
                     context := [{atom(), jsx:json_term()}]
                    }.
 

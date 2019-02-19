@@ -21,6 +21,7 @@
                    host               := lager_logentries:host(),
                    port               := lager_logentries:port_number(),
                    extra_connect_opts := extra_connect_opts(),
+                   token              := iolist() | binary(),
                    socket             := socket(),
                    backoff            := backoff:backoff(),
                    context            := [lager_logentries:json_object()]
@@ -28,6 +29,7 @@
 
 %% gen_event callbacks
 
+-spec init([{atom(), any()}]) -> {ok, state()} | {error, {invalid_opts, term()}}.
 init(Options) ->
     case lager_logentries_utils:parse_config(Options) of
         {ok, Config} ->
