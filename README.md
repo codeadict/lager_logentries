@@ -17,7 +17,7 @@ Rebar3 dependencies:
 
 **Supported options:**
 
-* **host:** The hostname of the logentries endpoint. (default: `data.logentries.com`
+* **host:** The hostname of the logentries endpoint. (default: `data.logentries.com`)
 * **port:** The port number for logentries. (default: `80`)
 * **address_family:** Defines an specific IP protocol version. `inet` stands for IPv4, `inet6` for IPv6, and `undefined` means that suitable version will be chosen for you automatically. (default: `undefined`)
 * **token:** The unique logentries token (UUID) for the log destination.
