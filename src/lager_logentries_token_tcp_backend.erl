@@ -18,7 +18,7 @@
 %% gen_event callbacks
 
 init(Options) ->
-  ok.
+    ok.
 
 handle_call({set_loglevel, Level}, State) ->
     case lager_graylog_utils:validate_loglevel(Level) of
@@ -75,10 +75,10 @@ code_change(_OldVsn, State, _Extra) ->
 
 -spec open_connection(state()) -> state().
 open_connection(#{socket := disconnected,
-              host := Host,
-              port := Port,
-              extra_connect_opts := ExtraConnectOpts,
-              backoff := Backoff} = State) ->
+                  host := Host,
+                  port := Port,
+                  extra_connect_opts := ExtraConnectOpts,
+                  backoff := Backoff} = State) ->
     case gen_tcp:connect(Host, Port, [binary, {active, false} | ExtraConnectOpts], 5000) of
         {ok, Socket} ->
             {_, NewBackoff} = backoff:succeed(Backoff),
@@ -88,7 +88,7 @@ open_connection(#{socket := disconnected,
             {ReconnectIn, NewBackoff} = backoff:fail(Backoff),
             set_reconnection_timer(ReconnectIn),
             lager:error("Could not connect to ~p:~p: ~p. Retrying in ~ps~n",
-                     [Host, Port, Reason, ReconnectIn]),
+                        [Host, Port, Reason, ReconnectIn]),
             State#{backoff := NewBackoff}
     end.
 
