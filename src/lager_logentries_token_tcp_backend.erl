@@ -54,15 +54,14 @@ handle_call(_Request, State) ->
 
 handle_event({log, Message}, #{name := Name,
                                level := Mask,
-                               socket := {connected, Socket},
-                               formatter := Formatter,
-                               formatter_config := FormatterConfig,
-                               formatter_state := FormatterState
+                               token := Token,
+                               socket := {connected, Socket}
                               } = State) ->
     case lager_util:is_loggable(Message, Mask, Name) of
         true ->
-            FormattedLog = lager_logentries_formater:format(Message),
-            case gen_tcp:send(Socket, [FormattedLog, 0]) of
+            LogEntry = lager_logentries_formatter:format(Message),
+            Data =  [Token, <<" ">>, jsx:encode(LogEntry), <<"\r\n">>],
+            case gen_tcp:send(Socket, Data) of
                 ok ->
                     {ok, State};
                 {error, Reason} ->
