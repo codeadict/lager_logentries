@@ -17,12 +17,12 @@ Rebar3 dependencies:
 
 **Supported options:**
 
-**host:** The hostname of the logentries endpoint. (default: `data.logentries.com`)
-**port:** The port number for logentries. (default: `80`)
-**address_family:** Defines an specific IP protocol version. `inet` stands for IPv4, `inet6` for IPv6, and `undefined` means that suitable version will be chosen for you automatically. (default: `undefined`)
-**token:** The unique logentries token (UUID) for the log destination.
-**level:** Minimum level for this backend. (default: `info`)
-**context:** Proplist of additional fields to be added when sending the logs. Keys have to be either atoms, binaries or iolists and values must be anything that has an equivalent JSON datatype. (e.g. `[{<<"username">>, <<"codeadict">>}, {<<"environment">>, <<"production">>}]`)
+* **host:** The hostname of the logentries endpoint. (default: `data.logentries.com`
+* **port:** The port number for logentries. (default: `80`)
+* **address_family:** Defines an specific IP protocol version. `inet` stands for IPv4, `inet6` for IPv6, and `undefined` means that suitable version will be chosen for you automatically. (default: `undefined`)
+* **token:** The unique logentries token (UUID) for the log destination.
+* **level:** Minimum level for this backend. (default: `info`)
+* **context:** Proplist of additional fields to be added when sending the logs. Keys have to be either atoms, binaries or iolists and values must be anything that has an equivalent JSON datatype. (e.g. `[{<<"username">>, <<"codeadict">>}, {<<"environment">>, <<"production">>}]`)
 
 Add configuration to `sys.config`:
 
