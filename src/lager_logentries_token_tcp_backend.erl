@@ -12,32 +12,44 @@
 -define(BACKOFF_START, 1).
 -define(BACKOFF_MAX, 30).
 
+-type name() :: {?MODULE, {lager_logentries:host(), lager_logentries:port_number()}}.
 -type socket() :: disconnected | {connected, gen_tcp:socket()}.
 -type extra_connect_opts() :: [inet:address_family()].
+
+-type state() :: #{name               := name(),
+                   level              := lager_logentries:mask(),
+                   host               := lager_logentries:host(),
+                   port               := lager_logentries:port_number(),
+                   extra_connect_opts := extra_connect_opts(),
+                   socket             := socket(),
+                   backoff            := backoff:backoff(),
+                   context            := [lager_logentries:json_object()]
+                  }.
 
 %% gen_event callbacks
 
 init(Options) ->
-  case lager_logentries_utils:parse_config(Options) of
-    {ok, Config} ->
-        #{level := Mask,
-          host := Host,
-          port := Port,
-          address_family := AddressFamily,
-          token := Token,
-          context := Context} = Config,
-        State = #{name => {?MODULE, {Host, Port}},
-                  level => Mask,
-                  host => Host,
-                  port => Port,
-                  extra_connect_opts => extra_connect_opts(AddressFamily),
-                  token => Token,
-                  socket => disconnected,
-                  backoff => backoff:type(backoff:init(?BACKOFF_START, ?BACKOFF_MAX), jitter)
-                  },
-        {ok, open_connection(State)};
-    {error, Reason} ->
-        {error, {invalid_opts, Reason}}
+    case lager_logentries_utils:parse_config(Options) of
+        {ok, Config} ->
+            #{level := Mask,
+              host := Host,
+              port := Port,
+              address_family := AddressFamily,
+              token := Token,
+              context := Context} = Config,
+            State = #{name => {?MODULE, {Host, Port}},
+                      level => Mask,
+                      host => Host,
+                      port => Port,
+                      extra_connect_opts => extra_connect_opts(AddressFamily),
+                      token => Token,
+                      socket => disconnected,
+                      backoff => backoff:type(backoff:init(?BACKOFF_START, ?BACKOFF_MAX), jitter),
+                      context => Context
+                     },
+            {ok, open_connection(State)};
+        {error, Reason} ->
+            {error, {invalid_opts, Reason}}
     end.
 
 handle_call({set_loglevel, Level}, State) ->
@@ -55,11 +67,12 @@ handle_call(_Request, State) ->
 handle_event({log, Message}, #{name := Name,
                                level := Mask,
                                token := Token,
-                               socket := {connected, Socket}
+                               socket := {connected, Socket},
+                               context := Context
                               } = State) ->
     case lager_util:is_loggable(Message, Mask, Name) of
         true ->
-            LogEntry = lager_logentries_formatter:format(Message),
+            LogEntry = lager_logentries_formatter:format(Message, Context),
             Data =  [Token, <<" ">>, jsx:encode(LogEntry), <<"\r\n">>],
             case gen_tcp:send(Socket, Data) of
                 ok ->
@@ -94,10 +107,10 @@ code_change(_OldVsn, State, _Extra) ->
 
 -spec open_connection(state()) -> state().
 open_connection(#{socket := disconnected,
-              host := Host,
-              port := Port,
-              extra_connect_opts := ExtraConnectOpts,
-              backoff := Backoff} = State) ->
+                  host := Host,
+                  port := Port,
+                  extra_connect_opts := ExtraConnectOpts,
+                  backoff := Backoff} = State) ->
     case gen_tcp:connect(Host, Port, [binary, {active, false} | ExtraConnectOpts], 5000) of
         {ok, Socket} ->
             {_, NewBackoff} = backoff:succeed(Backoff),
@@ -107,7 +120,7 @@ open_connection(#{socket := disconnected,
             {ReconnectIn, NewBackoff} = backoff:fail(Backoff),
             set_reconnection_timer(ReconnectIn),
             lager:error("Could not connect to ~p:~p: ~p. Retrying in ~ps~n",
-                     [Host, Port, Reason, ReconnectIn]),
+                        [Host, Port, Reason, ReconnectIn]),
             State#{backoff := NewBackoff}
     end.
 
@@ -115,3 +128,8 @@ open_connection(#{socket := disconnected,
 set_reconnection_timer(ReconnectInSeconds) ->
     erlang:start_timer(ReconnectInSeconds * 1000, self(), reconnect),
     ok.
+
+-spec extra_connect_opts(lager_logentries:address_family()) -> extra_connect_opts().
+extra_connect_opts(undefined) -> [];
+extra_connect_opts(inet) -> [inet];
+extra_connect_opts(inet6) -> [inet6].

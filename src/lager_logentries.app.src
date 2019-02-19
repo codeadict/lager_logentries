@@ -1,4 +1,3 @@
-%-*-Erlang-*-
 {application, lager_logentries,
  [
   {description, "Lager backend sending log messages to Logentries"},
