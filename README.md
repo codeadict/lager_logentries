@@ -27,14 +27,17 @@ Rebar3 dependencies:
 Add configuration to `sys.config`:
 
 ```erlang
-{lager, [{ handlers
-         , [{ lager_logentries_token_tcp_backend
-            , [ {host, "data.logentries.com"}
-              , {port, 80}
-              ]
-            }]
-         }]
-}
+{lager, [{ handlers,
+  [{ lager_logentries_token_tcp_backend,
+    [
+      {host, "data.logentries.com"},
+      {port, 80},
+      {token, "2bfbea1e-10c3-4419-bdad-7e6435882e1f"},
+      {level, info},
+      {context, [{<<"username">>, <<"codeadict">>}]}
+    ]
+  }]
+}]}
 ```
 
 ## Usage
