@@ -8,7 +8,7 @@
                   kernel,
                   stdlib,
                   backoff,
-                  jiffy
+                  jsx
                  ]},
   {env, []},
   {maintainers, ["Dairon Medina Caro"]},
