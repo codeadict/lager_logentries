@@ -1,4 +1,4 @@
- -module(lager_logentries_utils).
+-module(lager_logentries_utils).
 
 -export([parse_config/1,
          validate_loglevel/1,
@@ -58,11 +58,7 @@ validate_loglevel(Level) ->
 -spec is_uuid4(iolist() | binary()) -> boolean().
 is_uuid4(Uuid) when is_list(Uuid) ->
     is_uuid4(iolist_to_binary(Uuid));
-is_uuid4(<<_:48,
-           0:1, 1:1, 0:1, 0:1,  % Version 4 bits
-           _:12,
-           1:1, 0:1,            % RFC 4122 variant bits
-           _:62>> = Uuid) when is_binary(Uuid)->
+is_uuid4(<<_:36/binary>> = Uuid) when is_binary(Uuid)->
     true;
 is_uuid4(_) ->
     false.
@@ -87,9 +83,6 @@ validate_setting(address_family, Family) when Family =/= undefined,
     {error, {invalid_address_family, Family}};
 validate_setting(token, undefined) ->
     {error, undefined_token};
-validate_setting(token, Token) when not is_list(Token)
-                                    orelse not is_binary(Token) ->
-    {error, {invalid_token, Token}};
 validate_setting(token, Token) ->
     case is_uuid4(Token) of
         true ->
