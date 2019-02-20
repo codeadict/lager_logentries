@@ -10,8 +10,7 @@
                   jsx
                  ]},
   {env, []},
-  {maintainers, ["Dairon Medina Caro"]},
   {licenses, ["Apache 2.0"]},
-  {links, [{"Github", "https://github.com/codeadict/lager_logentries"}]}
- ]
-}.
+  {links, [
+           {"Github", "https://github.com/codeadict/lager_logentries"}]}
+ ]}.
