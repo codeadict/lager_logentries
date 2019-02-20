@@ -1,7 +1,16 @@
+sudo: false
+
 language: erlang
+install: 'true'
 branches:
   only:
     - master
+
+before_script:
+  - wget https://s3.amazonaws.com/rebar3/rebar3
+  - chmod +x rebar3
+
+env: PATH=$PATH:.
 
 cache:
   - ~/.cache/rebar3
@@ -12,8 +21,8 @@ otp_release:
   - 19.3
 
 script:
-  - rebar3 ct
-  - rebar3 dialyzer
+  - ./rebar3 test
+  - ./rebar3 dialyzer
 
 notifications:
   email: dairon.medina@gmail.com
