@@ -2,6 +2,10 @@
 
 Backend for Lager which sends logs to [Logentries](https://logentries.com)  via [Token TCP](https://docs.logentries.com/docs/input-token)
 
+__Version:__ 0.1.0
+
+[![Build Status](https://travis-ci.org/codeadict/lager_logentries.svg?branch=master)](https://travis-ci.org/codeadict/lager_logentries)
+
 ## Installation
 
 This library is [available on Hex](https://hex.pm/packages/lager_logentries). Just add it to your
