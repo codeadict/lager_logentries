@@ -13,7 +13,7 @@ Rebar3 dependencies:
 
 ```erlang
 {deps, [
-  {lager_graylog, "0.1.0"}
+  {lager_logentries, "0.1.0"}
 ]}.
 ```
 

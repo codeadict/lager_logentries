@@ -46,7 +46,7 @@ validate_settings([{Key, Value} | Rest], Acc) ->
 validate_settings([], Acc) ->
     {ok, Acc}.
 
--spec validate_loglevel(any()) -> {ok, lager_graylog:mask()} | error.
+-spec validate_loglevel(any()) -> {ok, lager_logentries:mask()} | error.
 validate_loglevel(Level) ->
     try lager_util:config_to_mask(Level) of
         Mask ->
