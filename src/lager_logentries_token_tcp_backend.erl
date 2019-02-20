@@ -55,7 +55,7 @@ init(Options) ->
     end.
 
 handle_call({set_loglevel, Level}, State) ->
-    case lager_graylog_utils:validate_loglevel(Level) of
+    case lager_logentries_utils:validate_loglevel(Level) of
         error ->
             {ok, {error, bad_loglevel}, State};
         {ok, Mask} ->
