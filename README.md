@@ -4,6 +4,8 @@ Backend for Lager which sends logs to [Logentries](https://logentries.com)  via 
 
 __Version:__ 0.1.0
 
+[![Hex.pm](https://img.shields.io/hexpm/v/lager_logentries.svg?maxAge=2592000?style=plastic)](https://hex.pm/packages/lager_logentries)
+[![Hex.pm](https://img.shields.io/hexpm/dt/lager_logentries.svg?maxAge=2592000)](https://hex.pm/packages/lager_logentries)
 [![Build Status](https://travis-ci.org/codeadict/lager_logentries.svg?branch=master)](https://travis-ci.org/codeadict/lager_logentries)
 
 ## Installation
