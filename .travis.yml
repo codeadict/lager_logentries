@@ -23,7 +23,7 @@ otp_release:
   - 23.0
 
 script:
-  - ./rebar3 do dialyzer, xref, eunit, ct
+  - ./rebar3 do dialyzer, xref, test
 
 notifications:
   email: dairon.medina@gmail.com
