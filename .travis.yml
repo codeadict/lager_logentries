@@ -16,9 +16,11 @@ cache:
   - ~/.cache/rebar3
 
 otp_release:
-  - 21.1
-  - 20.3
   - 19.3
+  - 20.3
+  - 21.3
+  - 22.3
+  - 23.0
 
 script:
   - ./rebar3 test
