@@ -20,17 +20,23 @@ parse_config(Config) when is_list(Config) ->
     Host = proplists:get_value(host, Config, <<"data.logentries.com">>),
     Port = proplists:get_value(port, Config, 80),
     AddressFamily = proplists:get_value(address_family, Config),
+    Transport = proplists:get_value(transport, Config, guess_transport(Port)),
     Token = proplists:get_value(token, Config),
     Context = proplists:get_value(context, Config, []),
     DefaultConfig = [{level, Level},
                      {host, Host},
                      {port, Port},
                      {address_family, AddressFamily},
+                     {transport, Transport},
                      {token, Token},
                      {context, Context}],
     validate_settings(DefaultConfig, #{}).
 
 %% Private
+
+-spec guess_transport(inet:port_number()) -> tcp | tls.
+guess_transport(443) -> tls;
+guess_transport(_) -> tcp.
 
 -spec validate_settings([{atom(), term()}], map()) ->
                                {ok, config()} | {error, term()}.
